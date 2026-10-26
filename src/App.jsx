@@ -1,4 +1,8 @@
+import { useState } from "react";
+
 function PaisCard({ nombre, bandera, region, poblacion }) {
+  const [esFavorito, setEsFavorito] = useState(false);
+
   return (
     <div>
       <img src={bandera} alt={`Bandera de ${nombre}`} />
@@ -6,6 +10,9 @@ function PaisCard({ nombre, bandera, region, poblacion }) {
       <p>
         {region} · {poblacion.toLocaleString()} hab.
       </p>
+      <button onClick={() => setEsFavorito(!esFavorito)}>
+        {esFavorito ? "Quitar favorito" : "Favorito"}
+      </button>
     </div>
   );
 }
