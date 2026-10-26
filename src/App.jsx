@@ -23,23 +23,33 @@ function PaisCard({ nombre, bandera, region, poblacion }) {
 
 export default function App() {
   const [paises, setPaises] = useState([]);
+  const [cargando, setCargando] = useState(true);
+  const [error, setError] = useState(null);
   const [busqueda, setBusqueda] = useState("");
 
   useEffect(() => {
     async function cargar() {
-      const res = await fetch(API);
-      const datos = await res.json();
-      setPaises(datos);
+      try {
+        const res = await fetch(API);
+        if (!res.ok) throw new Error("Error " + res.status);
+        setPaises(await res.json());
+      } catch (e) {
+        setError(e.message);
+      } finally {
+        setCargando(false);
+      }
     }
     cargar();
   }, []);
 
-  // ahora filtra paises, ya no PAISES
   const visibles = paises.filter((p) =>
     p.name.common
       .toLowerCase()
       .includes(busqueda.toLowerCase())
   );
+
+  if (cargando) return <p>Cargando países…</p>;
+  if (error) return <p>Error: {error}</p>;
 
   return (
     <div>
