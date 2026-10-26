@@ -1,5 +1,29 @@
 import { useState } from "react";
 
+const PAISES = [
+  {
+    cca3: "MEX",
+    name: { common: "México" },
+    flags: { png: "https://flagcdn.com/w160/mx.png" },
+    region: "Americas",
+    population: 128455567,
+  },
+  {
+    cca3: "JPN",
+    name: { common: "Japón" },
+    flags: { png: "https://flagcdn.com/w160/jp.png" },
+    region: "Asia",
+    population: 123201922,
+  },
+  {
+    cca3: "FRA",
+    name: { common: "Francia" },
+    flags: { png: "https://flagcdn.com/w160/fr.png" },
+    region: "Europe",
+    population: 66548530,
+  },
+];
+
 function PaisCard({ nombre, bandera, region, poblacion }) {
   const [esFavorito, setEsFavorito] = useState(false);
 
@@ -21,24 +45,15 @@ export default function App() {
   return (
     <div>
       <h1>Atlas IA</h1>
-      <PaisCard
-        nombre="México"
-        bandera="https://flagcdn.com/w160/mx.png"
-        region="Americas"
-        poblacion={128455567}
-      />
-      <PaisCard
-        nombre="Japón"
-        bandera="https://flagcdn.com/w160/jp.png"
-        region="Asia"
-        poblacion={123201922}
-      />
-      <PaisCard
-        nombre="Francia"
-        bandera="https://flagcdn.com/w160/fr.png"
-        region="Europe"
-        poblacion={66548530}
-      />
+      {PAISES.map((p) => (
+        <PaisCard
+          key={p.cca3}
+          nombre={p.name.common}
+          bandera={p.flags.png}
+          region={p.region}
+          poblacion={p.population}
+        />
+      ))}
     </div>
   );
 }
