@@ -5,6 +5,7 @@ export default function PaisCard({
   poblacion,
   esFavorito,
   onToggle,
+  onSelect,
 }) {
   return (
     <div>
@@ -13,6 +14,7 @@ export default function PaisCard({
       <p>
         {region} · {poblacion.toLocaleString()} hab.
       </p>
+      <button onClick={onSelect}>Ver detalle</button>
       <button onClick={onToggle}>
         {esFavorito ? "Quitar favorito" : "Favorito"}
       </button>

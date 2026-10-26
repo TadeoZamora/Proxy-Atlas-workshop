@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Header from "./components/Header";
 import Buscador from "./components/Buscador";
 import ListaPaises from "./components/ListaPaises";
+import DetallePais from "./components/DetallePais";
 
 const API =
   "https://restcountries.com/v3.1/all" +
@@ -13,6 +14,7 @@ export default function App() {
   const [error, setError] = useState(null);
   const [busqueda, setBusqueda] = useState("");
   const [favoritos, setFavoritos] = useState([]);
+  const [seleccionado, setSeleccionado] = useState(null);
 
   useEffect(() => {
     async function cargar() {
@@ -50,10 +52,14 @@ export default function App() {
     <div>
       <Header totalFavoritos={favoritos.length} />
       <Buscador valor={busqueda} onCambio={setBusqueda} />
+      {seleccionado && (
+        <DetallePais pais={seleccionado} />
+      )}
       <ListaPaises
         paises={visibles}
         favoritos={favoritos}
         onToggle={toggleFavorito}
+        onSelect={setSeleccionado}
       />
     </div>
   );
