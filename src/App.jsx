@@ -52,7 +52,7 @@ export default function App() {
       <Header totalFavoritos={favoritos.length} />
       <Buscador valor={busqueda} onCambio={setBusqueda} />
       {seleccionado && (
-        <DetallePais pais={seleccionado} />
+        <DetallePais key={seleccionado.cca3} pais={seleccionado} />
       )}
       <ListaPaises
         paises={visibles}
