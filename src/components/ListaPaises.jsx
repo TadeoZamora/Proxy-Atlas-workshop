@@ -4,7 +4,7 @@ export default function ListaPaises({ paises, favoritos, onToggle, onSelect }) {
   if (paises.length === 0) return <p>No hay resultados</p>;
 
   return (
-    <div>
+    <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
       {paises.map((p) => (
         <PaisCard
           key={p.cca3}

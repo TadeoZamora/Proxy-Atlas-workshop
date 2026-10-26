@@ -5,8 +5,7 @@ import ListaPaises from "./components/ListaPaises";
 import DetallePais from "./components/DetallePais";
 
 const API =
-  "https://restcountries.com/v3.1/all" +
-  "?fields=name,cca3,flags,region,population,capital";
+  "https://restcountries.com/v3.1/all?fields=name,cca3,flags,region,population,capital";
 
 export default function App() {
   const [paises, setPaises] = useState([]);
@@ -21,7 +20,9 @@ export default function App() {
       try {
         const res = await fetch(API);
         if (!res.ok) throw new Error("Error " + res.status);
-        setPaises(await res.json());
+        const datos = await res.json();
+        datos.sort((a, b) => a.name.common.localeCompare(b.name.common));
+        setPaises(datos);
       } catch (e) {
         setError(e.message);
       } finally {
@@ -40,16 +41,14 @@ export default function App() {
   }
 
   const visibles = paises.filter((p) =>
-    p.name.common
-      .toLowerCase()
-      .includes(busqueda.toLowerCase())
+    p.name.common.toLowerCase().includes(busqueda.toLowerCase())
   );
 
-  if (cargando) return <p>Cargando países…</p>;
-  if (error) return <p>Error: {error}</p>;
+  if (cargando) return <p className="p-8">Cargando países…</p>;
+  if (error) return <p className="p-8 text-red-600">Error: {error}</p>;
 
   return (
-    <div>
+    <div className="mx-auto max-w-5xl space-y-6 bg-slate-50 p-6">
       <Header totalFavoritos={favoritos.length} />
       <Buscador valor={busqueda} onCambio={setBusqueda} />
       {seleccionado && (
