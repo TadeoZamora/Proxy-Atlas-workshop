@@ -42,18 +42,36 @@ function PaisCard({ nombre, bandera, region, poblacion }) {
 }
 
 export default function App() {
+  const [busqueda, setBusqueda] = useState("");
+
+  const visibles = PAISES.filter((p) =>
+    p.name.common
+      .toLowerCase()
+      .includes(busqueda.toLowerCase())
+  );
+
   return (
     <div>
       <h1>Atlas IA</h1>
-      {PAISES.map((p) => (
-        <PaisCard
-          key={p.cca3}
-          nombre={p.name.common}
-          bandera={p.flags.png}
-          region={p.region}
-          poblacion={p.population}
-        />
-      ))}
+      <input
+        value={busqueda}
+        onChange={(e) => setBusqueda(e.target.value)}
+        placeholder="Buscar país…"
+      />
+
+      {visibles.length === 0 ? (
+        <p>No hay resultados</p>
+      ) : (
+        visibles.map((p) => (
+          <PaisCard
+            key={p.cca3}
+            nombre={p.name.common}
+            bandera={p.flags.png}
+            region={p.region}
+            poblacion={p.population}
+          />
+        ))
+      )}
     </div>
   );
 }
