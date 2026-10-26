@@ -1,28 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const PAISES = [
-  {
-    cca3: "MEX",
-    name: { common: "México" },
-    flags: { png: "https://flagcdn.com/w160/mx.png" },
-    region: "Americas",
-    population: 128455567,
-  },
-  {
-    cca3: "JPN",
-    name: { common: "Japón" },
-    flags: { png: "https://flagcdn.com/w160/jp.png" },
-    region: "Asia",
-    population: 123201922,
-  },
-  {
-    cca3: "FRA",
-    name: { common: "Francia" },
-    flags: { png: "https://flagcdn.com/w160/fr.png" },
-    region: "Europe",
-    population: 66548530,
-  },
-];
+const API =
+  "https://restcountries.com/v3.1/all" +
+  "?fields=name,cca3,flags,region,population,capital";
 
 function PaisCard({ nombre, bandera, region, poblacion }) {
   const [esFavorito, setEsFavorito] = useState(false);
@@ -42,9 +22,20 @@ function PaisCard({ nombre, bandera, region, poblacion }) {
 }
 
 export default function App() {
+  const [paises, setPaises] = useState([]);
   const [busqueda, setBusqueda] = useState("");
 
-  const visibles = PAISES.filter((p) =>
+  useEffect(() => {
+    async function cargar() {
+      const res = await fetch(API);
+      const datos = await res.json();
+      setPaises(datos);
+    }
+    cargar();
+  }, []);
+
+  // ahora filtra paises, ya no PAISES
+  const visibles = paises.filter((p) =>
     p.name.common
       .toLowerCase()
       .includes(busqueda.toLowerCase())
