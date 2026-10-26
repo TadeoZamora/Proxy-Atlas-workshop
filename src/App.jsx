@@ -1,31 +1,18 @@
 import { useEffect, useState } from "react";
+import Header from "./components/Header";
+import Buscador from "./components/Buscador";
+import ListaPaises from "./components/ListaPaises";
 
 const API =
   "https://restcountries.com/v3.1/all" +
   "?fields=name,cca3,flags,region,population,capital";
-
-function PaisCard({ nombre, bandera, region, poblacion }) {
-  const [esFavorito, setEsFavorito] = useState(false);
-
-  return (
-    <div>
-      <img src={bandera} alt={`Bandera de ${nombre}`} />
-      <h2>{nombre}</h2>
-      <p>
-        {region} · {poblacion.toLocaleString()} hab.
-      </p>
-      <button onClick={() => setEsFavorito(!esFavorito)}>
-        {esFavorito ? "Quitar favorito" : "Favorito"}
-      </button>
-    </div>
-  );
-}
 
 export default function App() {
   const [paises, setPaises] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
   const [busqueda, setBusqueda] = useState("");
+  const [favoritos, setFavoritos] = useState([]);
 
   useEffect(() => {
     async function cargar() {
@@ -42,6 +29,14 @@ export default function App() {
     cargar();
   }, []);
 
+  function toggleFavorito(codigo) {
+    setFavoritos((prev) =>
+      prev.includes(codigo)
+        ? prev.filter((c) => c !== codigo)
+        : [...prev, codigo]
+    );
+  }
+
   const visibles = paises.filter((p) =>
     p.name.common
       .toLowerCase()
@@ -53,26 +48,13 @@ export default function App() {
 
   return (
     <div>
-      <h1>Atlas IA</h1>
-      <input
-        value={busqueda}
-        onChange={(e) => setBusqueda(e.target.value)}
-        placeholder="Buscar país…"
+      <Header totalFavoritos={favoritos.length} />
+      <Buscador valor={busqueda} onCambio={setBusqueda} />
+      <ListaPaises
+        paises={visibles}
+        favoritos={favoritos}
+        onToggle={toggleFavorito}
       />
-
-      {visibles.length === 0 ? (
-        <p>No hay resultados</p>
-      ) : (
-        visibles.map((p) => (
-          <PaisCard
-            key={p.cca3}
-            nombre={p.name.common}
-            bandera={p.flags.png}
-            region={p.region}
-            poblacion={p.population}
-          />
-        ))
-      )}
     </div>
   );
 }
